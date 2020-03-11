@@ -6,11 +6,7 @@ from perec.utils.torch_utils import l2_loss
 
 
 class Generator(nn.Module):
-    def __init__(self,
-                 n_users,
-                 n_items,
-                 embed_size,
-                 regs):
+    def __init__(self, n_users, n_items, embed_size, regs):
         super(Generator, self).__init__()
 
         self.n_users = n_users
@@ -32,7 +28,7 @@ class Generator(nn.Module):
         u_e, i_e, b = self._get_embedding(user, items)
         u_e = u_e.unsqueeze(dim=1)
 
-        logits = torch.sum(u_e*i_e, dim=2) + b
+        logits = torch.sum(u_e * i_e, dim=2) + b
         probs = torch.softmax(logits, dim=1)
 
         regularizer = l2_loss(u_e, i_e, b)
@@ -42,7 +38,7 @@ class Generator(nn.Module):
         row_ids = torch.arange(batch_size, device=user.device).unsqueeze(dim=1)
         good_prob = probs[row_ids, ids].squeeze()
 
-        gan_loss = -torch.mean(torch.log(good_prob)*reward)
+        gan_loss = -torch.mean(torch.log(good_prob) * reward)
 
         return gan_loss, reg_loss
 
@@ -50,7 +46,7 @@ class Generator(nn.Module):
         u_e, i_e, b = self._get_embedding(user, items)
         u_e = u_e.unsqueeze(dim=1)
 
-        ranking = torch.sum(u_e*i_e, dim=2) + b
+        ranking = torch.sum(u_e * i_e, dim=2) + b
         indices = torch.argmax(ranking, dim=1).unsqueeze(dim=1)
 
         batch_size = user.size(0)
@@ -69,11 +65,7 @@ class Generator(nn.Module):
 
 
 class Discriminator(nn.Module):
-    def __init__(self,
-                 n_users,
-                 n_items,
-                 embed_size,
-                 regs):
+    def __init__(self, n_users, n_items, embed_size, regs):
         super(Discriminator, self).__init__()
 
         self.n_users = n_users
@@ -109,7 +101,7 @@ class Discriminator(nn.Module):
         i_e = self.item_embedding[item]
         b = self.bias[item]
 
-        logits = torch.sum(u_e*i_e, dim=1) + b
+        logits = torch.sum(u_e * i_e, dim=1) + b
         cls_loss = F.binary_cross_entropy_with_logits(logits, label)
 
         reg_loss = self.regs * l2_loss(u_e, i_e)
@@ -121,32 +113,21 @@ class Discriminator(nn.Module):
         i_e = self.item_embedding[item]
         b = self.bias[item]
 
-        logits = torch.sum(u_e*i_e, dim=1) + b
-        reward = 2*(torch.sigmoid(logits) - 0.5)
+        logits = torch.sum(u_e * i_e, dim=1) + b
+        reward = 2 * (torch.sigmoid(logits) - 0.5)
 
         return reward
 
 
 class IRGAN:
-    def __init__(self,
-                 n_users,
-                 n_items,
-                 embed_size,
-                 regsD,
-                 regsG):
+    def __init__(self, n_users, n_items, embed_size, regsD, regsG):
         super(IRGAN, self).__init__()
 
         self.netG = Generator(
-            n_users=n_users,
-            n_items=n_items,
-            embed_size=embed_size,
-            regs=regsG
+            n_users=n_users, n_items=n_items, embed_size=embed_size, regs=regsG
         )
         self.netD = Discriminator(
-            n_users=n_users,
-            n_items=n_items,
-            embed_size=embed_size,
-            regs=regsD
+            n_users=n_users, n_items=n_items, embed_size=embed_size, regs=regsD
         )
 
         self.user_embedding = self.netD.user_embedding

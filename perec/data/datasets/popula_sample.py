@@ -12,6 +12,7 @@ class PopulaSample(BaseDataset):
     Sample negative items based on frequency in dataset
 
     """
+
     def __init__(self, cfg_data):
         super(PopulaSample, self).__init__(cfg_data)
 

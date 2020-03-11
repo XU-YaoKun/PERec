@@ -14,5 +14,5 @@ setup(
     url="https://github.com/XU-YaoKun/perec",
     description="personalized recommendation in pytorch",
     packages=find_packages(exclude=exclude_dirs),
-    install_requires=['torch', 'numpy', 'yacs', 'tqdm'],
+    install_requires=["torch", "numpy", "yacs", "tqdm"],
 )

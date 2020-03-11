@@ -2,10 +2,10 @@ import time
 
 import torch
 
-from perec.models.build import build_model
-from perec.data.build import build_dataloader
-from perec.solver.build import build_optimizer
+from perec.models import build_model
+from perec.solver import build_optimizer
 from perec.engine import train_mf, train_gan, test_model_v2
+from perec.data import build_dataloader
 from perec.utils.torch_utils import set_random_seed
 from perec.utils.variable import Data_params, User_dict
 from perec.utils.misc import print_dict
@@ -32,20 +32,16 @@ def train(cfg, output_dir=""):
         n_users=train_data_loader.dataset.n_users,
         n_items=train_data_loader.dataset.n_items,
         n_train=train_data_loader.dataset.n_train,
-        n_test=train_data_loader.dataset.n_test
+        n_test=train_data_loader.dataset.n_test,
     )
 
     user_dict = User_dict(
         train_user_dict=train_data_loader.dataset.train_dict,
-        test_user_dict=train_data_loader.dataset.test_dict
+        test_user_dict=train_data_loader.dataset.test_dict,
     )
 
     # build model
-    model = build_model(
-        data_params=data_params,
-        cfg=cfg
-    )
-
+    model = build_model(data_params=data_params, cfg=cfg)
     if torch.cuda.is_available():
         model = model.cuda()
 
@@ -67,13 +63,15 @@ def train(cfg, output_dir=""):
             data_loader=train_data_loader,
             optimizer=optimizer,
             cur_epoch=cur_epoch,
-            cfg=cfg
+            cfg=cfg,
         )
         epoch_time = time.time() - start_time
 
-        print("Epoch[{}]-Train {} \n total_time: {:.2f}s".format(
-            cur_epoch, loss_str, epoch_time
-        ))
+        print(
+            "Epoch[{}]-Train {} \n total_time: {:.2f}s".format(
+                cur_epoch, loss_str, epoch_time
+            )
+        )
 
         if cur_epoch % cfg.TRAIN.LOG_PERIOD == 0 or cur_epoch == max_epoch:
             with torch.no_grad():
@@ -92,7 +90,7 @@ def train(cfg, output_dir=""):
             if early_stop == cfg.TRAIN.EARLY_STOP:
                 break
 
-    print('-'*75)
+    print("-" * 75)
     print("Best Epoch[{}]".format(best_epoch))
     print_dict(best_result)
 

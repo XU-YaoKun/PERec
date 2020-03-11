@@ -3,8 +3,8 @@
 import argparse
 import os
 
-from perec.config.base import cfg
-from perec.engine.trainer import train
+from perec.config import cfg
+from perec.engine import train
 
 
 def parse_args():
@@ -40,9 +40,11 @@ def main():
     if output_dir:
         config_path = os.path.splitext(args.config_file)[0]
         config_path = config_path.replace("configs", "outputs")
-        output_dir = output_dir.replace('@', config_path)
+        output_dir = output_dir.replace("@", config_path)
         os.makedirs(output_dir, exist_ok=True)
-
+    
+    print(cfg)
+    print("output path: ", output_dir)
     train(cfg, output_dir)
 
 

@@ -10,6 +10,7 @@ class RandomSample(BaseDataset):
     Sample negative item randomly
 
     """
+
     def __init__(self, cfg_data):
         super(RandomSample, self).__init__(cfg_data)
 

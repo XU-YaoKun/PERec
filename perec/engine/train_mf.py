@@ -33,6 +33,3 @@ def train_mf(model, data_loader, optimizer, cur_epoch):
         loss, bpr_loss, reg_loss
     )
     return loss_str
-
-
-

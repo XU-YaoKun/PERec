@@ -98,7 +98,3 @@ _C.OUTPUT_DIR = "@"
 # For reproducibility... but not really, because modern fast
 # GPU libraries use non-deterministic op implementation
 _C.RANDOM_SEED = 2019
-
-
-
-

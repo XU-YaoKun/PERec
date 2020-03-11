@@ -21,12 +21,12 @@ def get_score(model, train_user_dict):
 def cal_ndcg(topk, test_set, num_pos, k):
     n = min(num_pos, k)
     nrange = np.arange(n) + 2
-    idcg = np.sum(1/np.log2(nrange))
+    idcg = np.sum(1 / np.log2(nrange))
 
     dcg = 0
     for i, s in enumerate(topk):
         if s in test_set:
-            dcg += 1/np.log2(i+2)
+            dcg += 1 / np.log2(i + 2)
 
     ndcg = dcg / idcg
 
@@ -84,21 +84,24 @@ def get_score_v2(model, train_user_dict, s, t):
 
     for u in range(s, t):
         pos = train_user_dict[u]
-        score_matrix[u-s][pos] = -1e5
+        score_matrix[u - s][pos] = -1e5
 
     return score_matrix
 
 
 def test_model_v2(model, ks, user_dict, n_batchs=4):
-    train_user_dict, test_user_dict = user_dict.train_user_dict, user_dict.test_user_dict
+    train_user_dict, test_user_dict = (
+        user_dict.train_user_dict,
+        user_dict.test_user_dict,
+    )
     n_test_user = len(test_user_dict)
 
     n_k = len(ks)
     result = {
-        'PRECISION': np.zeros(n_k),
-        'RECALL': np.zeros(n_k),
-        'NDCG': np.zeros(n_k),
-        'HIT_RATIO': np.zeros(n_k)
+        "PRECISION": np.zeros(n_k),
+        "RECALL": np.zeros(n_k),
+        "NDCG": np.zeros(n_k),
+        "HIT_RATIO": np.zeros(n_k),
     }
 
     n_users = model.n_users
@@ -133,9 +136,9 @@ def test_model_v2(model, ks, user_dict, n_batchs=4):
 
                 ndcg += cal_ndcg(topk, test_set, num_pos, k)
 
-            result['PRECISION'][i] += precision / n_test_user
-            result['RECALL'][i] += recall / n_test_user
-            result['NDCG'][i] += ndcg / n_test_user
-            result['HIT_RATIO'][i] += hr / n_test_user
+            result["PRECISION"][i] += precision / n_test_user
+            result["RECALL"][i] += recall / n_test_user
+            result["NDCG"][i] += ndcg / n_test_user
+            result["HIT_RATIO"][i] += hr / n_test_user
 
     return result

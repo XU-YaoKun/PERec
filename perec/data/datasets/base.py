@@ -39,16 +39,17 @@ class BaseDataset(Dataset):
 
     def _statistic(self):
         self.n_users = max(max(self.train_users), max(self.test_users)) + 1
-        self.n_items = max(self.max_list(self.train_items),
-                           self.max_list(self.test_items)) + 1
+        self.n_items = (
+            max(self.max_list(self.train_items), self.max_list(self.test_items)) + 1
+        )
 
     def _print(self):
-        print("-"*50)
+        print("-" * 50)
         print("- num_train - {}".format(self.n_train))
         print("- num_test  - {}".format(self.n_test))
         print("- num_users - {}".format(self.n_users))
         print("- num_items - {}".format(self.n_items))
-        print("-"*50)
+        print("-" * 50)
 
     def __len__(self):
         return self.n_train
@@ -72,4 +73,4 @@ class BaseDataset(Dataset):
         return out_dict
 
     def _get_one_neg(self, u, neg_list):
-        raise NotImplementedError('subclass must override _get_one_neg()!')
+        raise NotImplementedError("subclass must override _get_one_neg()!")

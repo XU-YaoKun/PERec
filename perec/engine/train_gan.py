@@ -51,9 +51,11 @@ def train_gan(model, data_loader, optimizer, cur_epoch):
         regsG += batch_regsG
         reward += torch.mean(batch_reward)
 
-    loss_str = "\n Dis Train loss: [{0:.5f} = {1:.5f} + {2:.5f}] \n Gen Train loss: [{3:.5f} = {4:.5f} + {5:.5f}]" \
-               "\n Reward: {6:.5f}".format(lossD, gan_lossD, regsD, lossG, gan_lossG, regsG, reward)
+    loss_str = (
+        "\n Dis Train loss: [{0:.5f} = {1:.5f} + {2:.5f}] \n Gen Train loss: [{3:.5f} = {4:.5f} + {5:.5f}]"
+        "\n Reward: {6:.5f}".format(
+            lossD, gan_lossD, regsD, lossG, gan_lossG, regsG, reward
+        )
+    )
 
     return loss_str
-
-

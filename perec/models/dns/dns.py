@@ -5,11 +5,7 @@ from perec.utils.torch_utils import l2_loss, bpr_loss
 
 
 class DNS(nn.Module):
-    def __init__(self,
-                 n_users,
-                 n_items,
-                 embed_size,
-                 regs):
+    def __init__(self, n_users, n_items, embed_size, regs):
         super(DNS, self).__init__()
 
         self.n_users = n_users
@@ -51,9 +47,7 @@ class DNS(nn.Module):
     @staticmethod
     def rank(u_e, negs_e):
         u_e = u_e.unsqueeze(dim=1)
-        ranking = torch.sum(u_e*negs_e, dim=2)
+        ranking = torch.sum(u_e * negs_e, dim=2)
         ranking = ranking.squeeze()
 
         return ranking
-
-

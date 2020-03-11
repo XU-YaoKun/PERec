@@ -15,9 +15,9 @@ def load_rating(file_name):
     ui_dicts = dict()
     n = 0
 
-    lines = open(file_name, 'r').readlines()
+    lines = open(file_name, "r").readlines()
     for l in lines:
-        v = [int(i) for i in l.strip().split(' ')]
+        v = [int(i) for i in l.strip().split(" ")]
 
         u_id, pos_ids = v[0], v[1:]
         pos_ids = list(set(pos_ids))
@@ -28,5 +28,3 @@ def load_rating(file_name):
             ui_dicts[u_id] = pos_ids
 
     return n, ui_dicts
-
-
