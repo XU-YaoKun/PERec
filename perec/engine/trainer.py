@@ -37,8 +37,7 @@ def train(cfg, output_dir=""):
     )
 
     user_dict = User_dict(
-        train_user_dict=dataset.train_dict,
-        test_user_dict=dataset.test_dict,
+        train_user_dict=dataset.train_dict, test_user_dict=dataset.test_dict,
     )
 
     # build model

@@ -3,6 +3,7 @@ import numpy as np
 
 from perec.data.datasets.base import BaseDataset
 
+
 class RandomWalkSample(BaseDataset):
     """Random Walk Sample
 
@@ -27,7 +28,7 @@ class RandomWalkSample(BaseDataset):
         for head, relation, tail in kg_np:
             path_dict[head].append(tail)
             path_dict[tail].append(head)
-        
+
         return path_dict
 
     def step(self, u, pos, neg_list):
@@ -40,15 +41,15 @@ class RandomWalkSample(BaseDataset):
                 neg = np.random.choice(all_id)
             else:
                 neg = np.random.choice(neighbor)
-            
+
             if neg not in train_set + neg_list:
                 break
-        
+
         return neg
 
     def _get_one_neg(self, u, pos, neg_list):
         neg = pos
         for _ in range(self.num_step):
             neg = self.step(u, neg, neg_list)
-        
+
         return neg

@@ -42,7 +42,7 @@ def main():
         config_path = config_path.replace("configs", "outputs")
         output_dir = output_dir.replace("@", config_path)
         os.makedirs(output_dir, exist_ok=True)
-    
+
     print(cfg)
     print("output path: ", output_dir)
 
