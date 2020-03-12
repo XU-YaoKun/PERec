@@ -27,17 +27,18 @@ def train(cfg, output_dir=""):
     set_random_seed(cfg.RANDOM_SEED)
 
     train_data_loader = build_dataloader(cfg)
+    dataset = train_data_loader.dataset
 
     data_params = Data_params(
-        n_users=train_data_loader.dataset.n_users,
-        n_items=train_data_loader.dataset.n_items,
-        n_train=train_data_loader.dataset.n_train,
-        n_test=train_data_loader.dataset.n_test,
+        n_users=dataset.n_users,
+        n_items=dataset.n_items,
+        n_train=dataset.n_train,
+        n_test=dataset.n_test,
     )
 
     user_dict = User_dict(
-        train_user_dict=train_data_loader.dataset.train_dict,
-        test_user_dict=train_data_loader.dataset.test_dict,
+        train_user_dict=dataset.train_dict,
+        test_user_dict=dataset.test_dict,
     )
 
     # build model

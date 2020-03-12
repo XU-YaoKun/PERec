@@ -40,3 +40,39 @@ And to specify parameters, change corresponding values in `.yaml` files. Or use 
 ```
 
 ### 4. Experiment Result
+
+i. amazon-book
+
+|MODEL|NDCG|RECALL|PRECISION|HIT RATIO|
+|-----|:--:|-----:|-----|:--:|
+|RNS|   |      |     |    |
+|PNS|   |      |     |    |
+|RWS|   |      |     |    |
+|DNS| | | | |
+|IRGAN| | | | |
+|AdvIR| | | | |
+|NMRN| | | | |
+
+ii. yelp2018
+
+|MODEL|NDCG|RECALL|PRECISION|HIT RATIO|
+|-----|:--:|:---:|:---:|:--:|
+|RNS|0.0298|0.0465|0.0118|0.1887|
+|PNS|   |      |     |    |
+|RWS|   |      |     |    |
+|DNS| | | | |
+|IRGAN| | | | |
+|AdvIR| | | | |
+|NMRN| | | | |
+
+iii. last-fm
+
+|MODEL|NDCG|RECALL|PRECISION|HIT RATIO|
+|-----|:--:|-----:|-----|:--:|
+|RNS|   |      |     |    |
+|PNS|   |      |     |    |
+|RWS|   |      |     |    |
+|DNS| | | | |
+|IRGAN| | | | |
+|AdvIR| | | | |
+|NMRN| | | | |

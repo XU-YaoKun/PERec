@@ -45,7 +45,9 @@ def main():
     
     print(cfg)
     print("output path: ", output_dir)
+
     train(cfg, output_dir)
+    exit(0)
 
 
 if __name__ == "__main__":
