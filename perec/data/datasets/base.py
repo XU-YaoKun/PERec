@@ -66,11 +66,11 @@ class BaseDataset(Dataset):
 
         neg_list = []
         for _ in range(self.k_negs):
-            neg_id = self._get_one_neg(u, neg_list)
+            neg_id = self._get_one_neg(u, pos, neg_list)
             neg_list.append(neg_id)
         out_dict["neg"] = torch.tensor(neg_list).squeeze()
 
         return out_dict
 
-    def _get_one_neg(self, u, neg_list):
+    def _get_one_neg(self, u, pos, neg_list):
         raise NotImplementedError("subclass must override _get_one_neg()!")

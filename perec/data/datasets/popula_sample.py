@@ -21,7 +21,7 @@ class PopulaSample(BaseDataset):
 
         self.all_id = list_range(self.n_items)
 
-    def _get_one_neg(self, u, neg_list):
+    def _get_one_neg(self, u, pos, neg_list):
         while True:
             neg = np.random.choice(self.all_id, p=self.popula)
             if neg not in self.train_dict[u] and neg not in neg_list:

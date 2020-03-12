@@ -9,6 +9,8 @@ def build_dataset(cfg):
         dataset = D.RandomSample(cfg.DATASET)
     elif cfg.DATASET.SAMPLING == "POPULA":
         dataset = D.PopulaSample(cfg.DATASET)
+    elif cfg.DATASET.SAMPLING == "RANDOM_WALK":
+        dataset = D.RandomSample(cfg.DATASET)
     else:
         raise NotImplementedError()
 

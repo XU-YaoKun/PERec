@@ -57,13 +57,13 @@ ii. yelp2018
 
 |MODEL|NDCG|RECALL|PRECISION|HIT RATIO|
 |-----|:--:|:---:|:---:|:--:|
-|RNS|0.0298|0.0465|0.0118|0.1887|
-|PNS|   |      |     |    |
-|RWS|   |      |     |    |
-|DNS| | | | |
-|IRGAN| | | | |
-|AdvIR| | | | |
-|NMRN| | | | |
+|RNS|0.0340|0.0528|0.0132|0.2098|
+|PNS|0.0294|0.0462|0.0116|0.1863|
+|RWS|||||
+|DNS|||||
+|IRGAN|||||
+|AdvIR|||||
+|NMRN|||||
 
 iii. last-fm
 

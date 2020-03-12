@@ -36,6 +36,7 @@ _C.DATASET.ROOT_DIR = ""
 _C.DATASET.SAMPLING = "RANDOM"
 # Number of negative items for each positive item
 _C.DATASET.K_NEGS = 1
+_C.DATASET.NUM_STEP = 3
 
 # -----------------------------------------
 # Dataloader

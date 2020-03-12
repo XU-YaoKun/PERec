@@ -14,7 +14,7 @@ class RandomSample(BaseDataset):
     def __init__(self, cfg_data):
         super(RandomSample, self).__init__(cfg_data)
 
-    def _get_one_neg(self, u, neg_list):
+    def _get_one_neg(self, u, pos, neg_list):
         while True:
             if self.k_negs == 1:
                 all_id = list_range(self.n_items)
