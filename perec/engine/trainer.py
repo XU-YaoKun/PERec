@@ -15,7 +15,7 @@ _MODEL_TRAINERS = {
     "DNS": train_mf,
     "IRGAN": train_gan,
     "NMRN": train_gan,
-    "Advir": train_gan,
+    "ADVIR": train_gan,
 }
 
 
