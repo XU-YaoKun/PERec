@@ -44,7 +44,7 @@ def main():
         os.makedirs(output_dir, exist_ok=True)
 
     print(cfg)
-    print("output path: ", output_dir)
+    print("OUTPUT_PATH: ", output_dir)
 
     train(cfg, output_dir)
     exit(0)
