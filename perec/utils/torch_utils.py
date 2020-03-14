@@ -28,3 +28,7 @@ def l2_loss(*args):
         result += torch.sum(x ** 2) / 2
 
     return result
+
+
+def euclidean_distance(u, v):
+    return torch.sum((u - v) ** 2, dim=-1)

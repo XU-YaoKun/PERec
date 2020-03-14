@@ -32,7 +32,9 @@ class Generator(nn.Module):
         reg_loss = self.regs * l2_loss(u_e, i_e)
 
         batch_size = user.size(0)
-        row_ids = torch.arange(batch_size, device=user.device, dtype=torch.long).unsqueeze(dim=1)
+        row_ids = torch.arange(
+            batch_size, device=user.device, dtype=torch.long
+        ).unsqueeze(dim=1)
         good_prob = probs[row_ids, ids].squeeze()
 
         gan_loss = -torch.mean(torch.log(good_prob) * reward)
@@ -71,12 +73,12 @@ class Discriminator(nn.Module):
         self.item_embedding = nn.Parameter(torch.FloatTensor(n_items, embed_size))
 
         self._init_weight()
-    
+
     def _init_weight(self):
         nn.init.xavier_uniform_(self.user_embedding)
         nn.init.xavier_uniform_(self.item_embedding)
 
-    def forward(self, user, pos, neg):
+    def forward(self, user, pos, neg, **kwargs):
         u_e = self.user_embedding[user]
         pos_e = self.item_embedding[pos]
         neg_e = self.item_embedding[neg]
@@ -95,7 +97,7 @@ class Discriminator(nn.Module):
         u_e = self.user_embedding[user]
         i_e = self.item_embedding[item]
 
-        reward = torch.sum(u_e*i_e, dim=1)
+        reward = torch.sum(u_e * i_e, dim=1)
 
         return reward
 
@@ -104,15 +106,16 @@ class AdvIR:
     def __init__(self, n_users, n_items, embed_size, regsD, regsG):
         super(AdvIR, self).__init__()
 
+        self.name = "AdvIR"
+        self.n_users = n_users
+        self.n_items = n_items
+
         self.netG = Generator(
             n_users=n_users, n_items=n_items, embed_size=embed_size, regs=regsG
         )
         self.netD = Discriminator(
             n_users=n_users, n_items=n_items, embed_size=embed_size, regs=regsD
         )
-
-        self.n_users = n_users
-        self.n_items = n_items
 
         self.user_embedding = self.netD.user_embedding
         self.item_embedding = self.netD.item_embedding

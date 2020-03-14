@@ -3,6 +3,8 @@ import numpy as np
 
 import torch
 
+from perec.utils.torch_utils import euclidean_distance
+
 
 def cal_ndcg(topk, test_set, num_pos, k):
     n = min(num_pos, k)
@@ -23,9 +25,13 @@ def get_score_v2(model, train_user_dict, s, t):
     u_e = model.user_embedding[s:t, :]
     i_e = model.item_embedding
 
-    score_matrix = torch.matmul(u_e, i_e.t())
-    if hasattr(model, "bias"):
-        score_matrix = score_matrix + model.bias
+    if model.name == "NMRN":
+        u_e = u_e.unsqueeze(dim=1)
+        score_matrix = (-1) * euclidean_distance(u_e, i_e)
+    else:
+        score_matrix = torch.matmul(u_e, i_e.t())
+        if hasattr(model, "bias"):
+            score_matrix = score_matrix + model.bias
 
     for u in range(s, t):
         pos = train_user_dict[u]

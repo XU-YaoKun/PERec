@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 from perec.utils.torch_utils import l2_loss
 
@@ -82,7 +83,7 @@ class Discriminator(nn.Module):
         nn.init.xavier_uniform_(self.item_embedding)
         nn.init.constant_(self.bias, 0.0)
 
-    def forward(self, user, pos, neg):
+    def forward(self, user, pos, neg, **kwargs):
         batch_size = user.size(0)
         pos_label = torch.ones(batch_size, device=user.device)
         neg_label = torch.zeros(batch_size, device=user.device)
@@ -121,6 +122,8 @@ class Discriminator(nn.Module):
 class IRGAN:
     def __init__(self, n_users, n_items, embed_size, regsD, regsG):
         super(IRGAN, self).__init__()
+
+        self.name = "IRGAN"
 
         self.netG = Generator(
             n_users=n_users, n_items=n_items, embed_size=embed_size, regs=regsG

@@ -8,6 +8,7 @@ class BPRMF(nn.Module):
     def __init__(self, n_users, n_items, embed_size, regs):
         super(BPRMF, self).__init__()
 
+        self.name = "BPRMF"
         self.n_users = n_users
         self.n_items = n_items
         self.regs = regs

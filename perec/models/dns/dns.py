@@ -8,6 +8,7 @@ class DNS(nn.Module):
     def __init__(self, n_users, n_items, embed_size, regs):
         super(DNS, self).__init__()
 
+        self.name = "DNS"
         self.n_users = n_users
         self.n_items = n_items
         self.regs = regs
