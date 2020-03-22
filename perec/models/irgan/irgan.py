@@ -12,6 +12,7 @@ class Generator(nn.Module):
         self.n_users = n_users
         self.n_items = n_items
         self.regs = regs
+        self.delta = 0.1
 
         self.user_embedding = nn.Parameter(torch.FloatTensor(n_users, embed_size))
         self.item_embedding = nn.Parameter(torch.FloatTensor(n_items, embed_size))
@@ -20,8 +21,9 @@ class Generator(nn.Module):
         self._init_weight()
 
     def _init_weight(self):
-        nn.init.xavier_uniform_(self.user_embedding)
-        nn.init.xavier_uniform_(self.item_embedding)
+        delta = self.delta
+        nn.init.uniform_(self.user_embedding, a=-delta, b=delta)
+        nn.init.uniform_(self.item_embedding, a=-delta, b=delta)
         nn.init.constant_(self.bias, 0.0)
 
     def forward(self, user, items, reward):
@@ -37,7 +39,7 @@ class Generator(nn.Module):
 
         max_log_probs = log_probs[row_id, max_idx]
         max_reward = reward[row_id, max_idx]
-        gan_loss = -torch.mean(log_probs * reward)
+        gan_loss = -torch.mean(max_log_probs * max_reward)
 
         regularizer = l2_loss(u_e, i_e, b)
         reg_loss = self.regs * regularizer
@@ -49,7 +51,8 @@ class Generator(nn.Module):
         u_e = u_e.unsqueeze(dim=1)
 
         ranking = torch.sum(u_e * i_e, dim=2) + b
-        indices = torch.argmax(ranking, dim=1).unsqueeze(dim=1)
+        p = F.softmax(ranking, dim=1)
+        indices = torch.multinomial(p, num_samples=1)
 
         batch_size = user.size(0)
         row_id = torch.arange(batch_size, device=user.device).unsqueeze(dim=1)
@@ -73,7 +76,7 @@ class Discriminator(nn.Module):
         self.n_users = n_users
         self.n_items = n_items
         self.regs = regs
-        self.delta = 0.5
+        self.delta = 0.1
 
         self.user_embedding = nn.Parameter(torch.FloatTensor(n_users, embed_size))
         self.item_embedding = nn.Parameter(torch.FloatTensor(n_items, embed_size))
@@ -82,8 +85,10 @@ class Discriminator(nn.Module):
         self._init_weight()
 
     def _init_weight(self):
-        nn.init.xavier_uniform_(self.user_embedding)
-        nn.init.xavier_uniform_(self.item_embedding)
+        delta = self.delta
+
+        nn.init.uniform_(self.user_embedding, a=-delta, b=delta)
+        nn.init.uniform_(self.item_embedding, a=-delta, b=delta)
         nn.init.constant_(self.bias, 0.0)
 
     def forward(self, user, pos, neg, **kwargs):
