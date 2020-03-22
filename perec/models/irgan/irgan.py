@@ -24,21 +24,23 @@ class Generator(nn.Module):
         nn.init.xavier_uniform_(self.item_embedding)
         nn.init.constant_(self.bias, 0.0)
 
-    def forward(self, user, items, ids, reward):
+    def forward(self, user, items, reward):
         u_e, i_e, b = self._get_embedding(user, items)
         u_e = u_e.unsqueeze(dim=1)
 
         logits = torch.sum(u_e * i_e, dim=2) + b
-        probs = torch.softmax(logits, dim=1)
+        log_probs = F.log_softmax(logits, dim=1)
+
+        batch_size = user.size(0)
+        row_id = torch.arange(batch_size, device=user.device).unsqueeze(dim=1)
+        max_idx = torch.argmax(log_probs, dim=1)
+
+        max_log_probs = log_probs[row_id, max_idx]
+        max_reward = reward[row_id, max_idx]
+        gan_loss = -torch.mean(log_probs * reward)
 
         regularizer = l2_loss(u_e, i_e, b)
         reg_loss = self.regs * regularizer
-
-        batch_size = user.size(0)
-        row_ids = torch.arange(batch_size, device=user.device).unsqueeze(dim=1)
-        good_prob = probs[row_ids, ids].squeeze()
-
-        gan_loss = -torch.mean(torch.log(good_prob) * reward)
 
         return gan_loss, reg_loss
 
@@ -54,7 +56,7 @@ class Generator(nn.Module):
 
         good_neg = items[row_id, indices].squeeze()
 
-        return good_neg, indices
+        return good_neg
 
     def _get_embedding(self, user, items):
         u_e = self.user_embedding[user]
@@ -71,6 +73,7 @@ class Discriminator(nn.Module):
         self.n_users = n_users
         self.n_items = n_items
         self.regs = regs
+        self.delta = 0.5
 
         self.user_embedding = nn.Parameter(torch.FloatTensor(n_users, embed_size))
         self.item_embedding = nn.Parameter(torch.FloatTensor(n_items, embed_size))
@@ -108,12 +111,13 @@ class Discriminator(nn.Module):
 
         return cls_loss, reg_loss
 
-    def step(self, user, item):
+    def step(self, user, items):
         u_e = self.user_embedding[user]
-        i_e = self.item_embedding[item]
-        b = self.bias[item]
+        i_e = self.item_embedding[items]
+        b = self.bias[items]
 
-        logits = torch.sum(u_e * i_e, dim=1) + b
+        u_e = u_e.unsqueeze(dim=1)
+        logits = torch.sum(u_e * i_e, dim=2) + b
         reward = 2 * (torch.sigmoid(logits) - 0.5)
 
         return reward

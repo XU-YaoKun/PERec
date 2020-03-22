@@ -24,22 +24,24 @@ def train_gan(model, data_loader, optimizer, cur_epoch):
         negs = data_batch["neg"]
 
         # train dis
-        optimD.zero_grad()
         with torch.no_grad():
-            good_neg, good_ids = netG.throw(user, negs)
+            good_neg = netG.throw(user, negs)
 
         batch_gan_lossD, batch_regsD = netD(user, pos, good_neg)
         batch_lossD = batch_gan_lossD + batch_regsD
+
+        optimD.zero_grad()
         batch_lossD.backward()
         optimD.step()
 
         # train gen
-        optimG.zero_grad()
         with torch.no_grad():
-            batch_reward = netD.step(user, good_neg)
+            batch_reward = netD.step(user, negs)
 
-        batch_gan_lossG, batch_regsG = netG(user, negs, good_ids, batch_reward)
+        batch_gan_lossG, batch_regsG = netG(user, negs, batch_reward)
         batch_lossG = batch_gan_lossG + batch_regsG
+
+        optimG.zero_grad()
         batch_lossG.backward()
         optimG.step()
 
