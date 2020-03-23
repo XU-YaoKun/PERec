@@ -12,7 +12,7 @@ class Generator(nn.Module):
         self.n_users = n_users
         self.n_items = n_items
         self.regs = regs
-        self.delta = 0.1
+        self.delta = 0.05
 
         self.user_embedding = nn.Parameter(torch.FloatTensor(n_users, embed_size))
         self.item_embedding = nn.Parameter(torch.FloatTensor(n_items, embed_size))
@@ -31,15 +31,12 @@ class Generator(nn.Module):
         u_e = u_e.unsqueeze(dim=1)
 
         logits = torch.sum(u_e * i_e, dim=2) + b
+
+        probs = F.softmax(logits, dim=1)
+        reward = reward * probs
+
         log_probs = F.log_softmax(logits, dim=1)
-
-        batch_size = user.size(0)
-        row_id = torch.arange(batch_size, device=user.device).unsqueeze(dim=1)
-        max_idx = torch.argmax(log_probs, dim=1)
-
-        max_log_probs = log_probs[row_id, max_idx]
-        max_reward = reward[row_id, max_idx]
-        gan_loss = -torch.mean(max_log_probs * max_reward)
+        gan_loss = -torch.mean(log_probs * reward)
 
         regularizer = l2_loss(u_e, i_e, b)
         reg_loss = self.regs * regularizer
@@ -76,7 +73,7 @@ class Discriminator(nn.Module):
         self.n_users = n_users
         self.n_items = n_items
         self.regs = regs
-        self.delta = 0.1
+        self.delta = 0.05
 
         self.user_embedding = nn.Parameter(torch.FloatTensor(n_users, embed_size))
         self.item_embedding = nn.Parameter(torch.FloatTensor(n_items, embed_size))
@@ -112,7 +109,7 @@ class Discriminator(nn.Module):
         logits = torch.sum(u_e * i_e, dim=1) + b
         cls_loss = F.binary_cross_entropy_with_logits(logits, label)
 
-        reg_loss = self.regs * l2_loss(u_e, i_e)
+        reg_loss = self.regs * l2_loss(u_e, i_e, b)
 
         return cls_loss, reg_loss
 
@@ -135,10 +132,10 @@ class IRGAN:
         self.name = "IRGAN"
 
         self.netG = Generator(
-            n_users=n_users, n_items=n_items, embed_size=embed_size, regs=regsG
+            n_users=n_users, n_items=n_items, embed_size=embed_size, regs=regsG,
         )
         self.netD = Discriminator(
-            n_users=n_users, n_items=n_items, embed_size=embed_size, regs=regsD
+            n_users=n_users, n_items=n_items, embed_size=embed_size, regs=regsD,
         )
 
         self.user_embedding = self.netD.user_embedding

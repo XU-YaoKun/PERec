@@ -3,7 +3,11 @@ import random
 
 from perec.data.datasets.base import BaseDataset
 from perec.data.datasets.utils import cal_popularity
-from perec.utils.misc import sample_one, sample_one_v2, list_range
+from perec.utils.misc import (
+    sample_one,
+    sample_one_v2,
+    list_range,
+)
 
 
 class PopulaSample(BaseDataset):

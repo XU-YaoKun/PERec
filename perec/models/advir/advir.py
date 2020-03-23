@@ -111,10 +111,10 @@ class AdvIR:
         self.n_items = n_items
 
         self.netG = Generator(
-            n_users=n_users, n_items=n_items, embed_size=embed_size, regs=regsG
+            n_users=n_users, n_items=n_items, embed_size=embed_size, regs=regsG,
         )
         self.netD = Discriminator(
-            n_users=n_users, n_items=n_items, embed_size=embed_size, regs=regsD
+            n_users=n_users, n_items=n_items, embed_size=embed_size, regs=regsD,
         )
 
         self.user_embedding = self.netD.user_embedding

@@ -5,7 +5,13 @@ from __future__ import print_function
 from setuptools import setup
 from setuptools import find_packages
 
-exclude_dirs = ("configs", "tests", "scripts", "data", "outputs")
+exclude_dirs = (
+    "configs",
+    "tests",
+    "scripts",
+    "data",
+    "outputs",
+)
 
 setup(
     name="perec",

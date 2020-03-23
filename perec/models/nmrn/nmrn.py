@@ -124,7 +124,7 @@ class NMRN:
         self.n_items = n_items
 
         self.netG = Generator(
-            n_user=n_users, n_item=n_items, embed_size=embed_size, regs=regs
+            n_user=n_users, n_item=n_items, embed_size=embed_size, regs=regs,
         )
         self.netD = Discriminator(
             n_item=n_items,

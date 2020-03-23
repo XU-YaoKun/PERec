@@ -40,7 +40,7 @@ class BaseDataset(Dataset):
     def _statistic(self):
         self.n_users = max(max(self.train_users), max(self.test_users)) + 1
         self.n_items = (
-            max(self.max_list(self.train_items), self.max_list(self.test_items)) + 1
+            max(self.max_list(self.train_items), self.max_list(self.test_items),) + 1
         )
 
     def _print(self):
@@ -61,7 +61,9 @@ class BaseDataset(Dataset):
         out_dict["user"] = u
 
         pos_items = self.train_dict[u]
-        pos = sample_one(pos_items)
+        pos_n = len(pos_items)
+        pos_id = np.random.randint(low=0, high=pos_n, size=1)[0]
+        pos = pos_items[pos_id]
         out_dict["pos"] = pos
 
         neg_list = []

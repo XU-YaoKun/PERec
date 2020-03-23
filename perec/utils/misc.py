@@ -8,7 +8,7 @@ def sample_one(l):
     this function is about twice slower than sample_one_v2
     but it's thread-safe
     """
-    ele = random.choice(l)
+    ele = random.sample(l, 1)[0]
 
     return ele
 
