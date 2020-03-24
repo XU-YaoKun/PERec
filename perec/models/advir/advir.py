@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 from perec.utils.torch_utils import l2_loss
 
@@ -21,23 +22,17 @@ class Generator(nn.Module):
         nn.init.xavier_uniform_(self.user_embedding)
         nn.init.xavier_uniform_(self.item_embedding)
 
-    def forward(self, user, items, ids, reward):
+    def forward(self, user, items, reward):
         u_e = self.user_embedding[user]
         i_e = self.item_embedding[items]
 
         u_e = u_e.unsqueeze(dim=1)
         logits = torch.sum(u_e * i_e, dim=2)
-        probs = torch.softmax(logits, dim=1)
+        log_probs = F.log_softmax(logits, dim=1)
 
         reg_loss = self.regs * l2_loss(u_e, i_e)
 
-        batch_size = user.size(0)
-        row_ids = torch.arange(
-            batch_size, device=user.device, dtype=torch.long
-        ).unsqueeze(dim=1)
-        good_prob = probs[row_ids, ids].squeeze()
-
-        gan_loss = -torch.mean(torch.log(good_prob) * reward)
+        gan_loss = -torch.mean(log_probs * reward)
 
         return gan_loss, reg_loss
 
@@ -58,7 +53,7 @@ class Generator(nn.Module):
 
         sampled_neg = items[row_idx, sampled_id].squeeze()
 
-        return sampled_neg, sampled_id
+        return sampled_neg
 
 
 class Discriminator(nn.Module):
@@ -93,11 +88,12 @@ class Discriminator(nn.Module):
 
         return bpr_loss, reg_loss
 
-    def step(self, user, item):
+    def step(self, user, items):
         u_e = self.user_embedding[user]
-        i_e = self.item_embedding[item]
+        i_e = self.item_embedding[items]
 
-        reward = torch.sum(u_e * i_e, dim=1)
+        u_e = u_e.unsqueeze(dim=1)
+        reward = torch.sum(u_e * i_e, dim=2)
 
         return reward
 

@@ -32,11 +32,11 @@ Anaconda is recommended to manage all dependences. So create a new env and then 
 
 To train different models, use corresponding config file. For example, to train `BPRMF`, using the following command,
 ```bash
-➜ python tools/train.py --cfg configs/BPR-MF.yaml 
+➜ python main.py --cfg configs/BPR-MF.yaml 
 ```
 And to specify parameters, change corresponding values in `.yaml` files. Or use command line.
 ```bash
-➜ python tools/train.py --cfg configs/BPR-MF.yaml DATASET.ROOT_DIR "data/amazon-book" 
+➜ python main.py --cfg configs/BPR-MF.yaml DATASET.ROOT_DIR "data/amazon-book" 
 ```
 
 ### 4. Experiment Result
@@ -44,7 +44,7 @@ And to specify parameters, change corresponding values in `.yaml` files. Or use 
 i. amazon-book
 
 |MODEL|NDCG|RECALL|PRECISION|HIT RATIO|
-|-----|:--:|-----:|-----|:--:|
+|:-----:|:--:|-----:|-----|:--:|
 |RNS|   |      |     |    |
 |PNS|   |      |     |    |
 |RWS|   |      |     |    |
@@ -56,19 +56,19 @@ i. amazon-book
 ii. yelp2018
 
 |MODEL|NDCG|RECALL|PRECISION|HIT RATIO|
-|-----|:--:|:---:|:---:|:--:|
+|:-----:|:--:|:---:|:---:|:--:|
 |RNS|0.0340|0.0528|0.0132|0.2098|
 |PNS|0.0294|0.0462|0.0116|0.1863|
 |RWS|0.0340|0.0528|0.0132|0.2098|
 |DNS|0.0420|0.0651|0.0162|0.2511|
-|IRGAN|||||
+|IRGAN|0.0349|0.0558|0.0135|0.2200|
 |AdvIR|||||
 |NMRN|||||
 
 iii. last-fm
 
 |MODEL|NDCG|RECALL|PRECISION|HIT RATIO|
-|-----|:--:|-----:|-----|:--:|
+|:-----:|:--:|-----:|-----|:--:|
 |RNS|   |      |     |    |
 |PNS|   |      |     |    |
 |RWS|   |      |     |    |
