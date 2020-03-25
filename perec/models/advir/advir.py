@@ -29,10 +29,10 @@ class Generator(nn.Module):
         u_e = u_e.unsqueeze(dim=1)
         logits = torch.sum(u_e * i_e, dim=2)
         log_probs = F.log_softmax(logits, dim=1)
+        
+        gan_loss = -torch.sum(log_probs * reward)
 
         reg_loss = self.regs * l2_loss(u_e, i_e)
-
-        gan_loss = -torch.mean(log_probs * reward)
 
         return gan_loss, reg_loss
 

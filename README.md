@@ -40,20 +40,7 @@ And to specify parameters, change corresponding values in `.yaml` files. Or use 
 ```
 
 ### 4. Experiment Result
-
-i. amazon-book
-
-|MODEL|NDCG|RECALL|PRECISION|HIT RATIO|
-|:-----:|:--:|-----:|-----|:--:|
-|RNS|   |      |     |    |
-|PNS|   |      |     |    |
-|RWS|   |      |     |    |
-|DNS| | | | |
-|IRGAN| | | | |
-|AdvIR| | | | |
-|NMRN| | | | |
-
-ii. yelp2018
+i. yelp2018
 
 |MODEL|NDCG|RECALL|PRECISION|HIT RATIO|
 |:-----:|:--:|:---:|:---:|:--:|
@@ -65,14 +52,6 @@ ii. yelp2018
 |AdvIR|||||
 |NMRN|||||
 
-iii. last-fm
+Other experimental results can be found in our paper, or can be obtained using this code repo. Note that we use a different method to calculate `NDCG` here, so it is slightly different from what presented in paper.
 
-|MODEL|NDCG|RECALL|PRECISION|HIT RATIO|
-|:-----:|:--:|-----:|-----|:--:|
-|RNS|   |      |     |    |
-|PNS|   |      |     |    |
-|RWS|   |      |     |    |
-|DNS| | | | |
-|IRGAN| | | | |
-|AdvIR| | | | |
-|NMRN| | | | |
+Some parameters, like `regs` and `lr`, can be tuned in order to get a better performance.

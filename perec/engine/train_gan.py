@@ -23,10 +23,9 @@ def train_gan(model, data_loader, optimizer, cur_epoch):
     gan_lossD, gan_lossG = 0, 0
     regsD, regsG = 0, 0
 
-    # train dis
-    d_tbar = tqdm(data_loader, ascii=True)
-    for data_batch in d_tbar:
-        d_tbar.set_description("Epoch {}, Sub D-Epoch".format(cur_epoch))
+    tbar = tqdm(data_loader, ascii=True)
+    for data_batch in tbar:
+        tbar.set_description("Epoch {}".format(cur_epoch))
 
         user, pos, negs = get_item(data_batch)
 
@@ -43,13 +42,6 @@ def train_gan(model, data_loader, optimizer, cur_epoch):
         gan_lossD += batch_gan_lossD
         lossD += batch_lossD
         regsD += batch_regsD
-
-    # train gen
-    g_tbar = tqdm(data_loader, ascii=True)
-    for data_batch in g_tbar:
-        g_tbar.set_description("Epoch {}, sub G-Epoch".format(cur_epoch))
-
-        user, pos, negs = get_item(data_batch)
 
         with torch.no_grad():
             batch_reward = netD.step(user, negs)
