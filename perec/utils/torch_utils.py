@@ -32,3 +32,12 @@ def l2_loss(*args):
 
 def euclidean_distance(u, v):
     return torch.sum((u - v) ** 2, dim=-1)
+
+
+def get_row_index(e):
+    num_row = e.size(0)
+    row_index = torch.arange(
+        num_row, device=e.device, dtype=torch.long
+    ).unsqueeze(dim=1)
+
+    return row_index

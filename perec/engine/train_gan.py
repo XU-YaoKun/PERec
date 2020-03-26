@@ -3,17 +3,6 @@ import torch
 from tqdm import tqdm
 
 
-def get_item(data_batch):
-    if torch.cuda.is_available():
-        data_batch = {k: v.cuda(non_blocking=True) for k, v in data_batch.items()}
-
-    user = data_batch["user"]
-    pos = data_batch["pos"]
-    neg = data_batch["neg"]
-
-    return user, pos, neg
-
-
 def train_gan(model, data_loader, optimizer, cur_epoch):
     # unpack optimizer and model
     optimD, optimG = optimizer
@@ -27,7 +16,12 @@ def train_gan(model, data_loader, optimizer, cur_epoch):
     for data_batch in tbar:
         tbar.set_description("Epoch {}".format(cur_epoch))
 
-        user, pos, negs = get_item(data_batch)
+        if torch.cuda.is_available():
+            data_batch = {k: v.cuda(non_blocking=True) for k, v in data_batch.items()}
+
+        user = data_batch["user"]
+        negs = data_batch["neg"]
+        pos = data_batch["pos"]
 
         with torch.no_grad():
             good_neg = netG.throw(user, negs)

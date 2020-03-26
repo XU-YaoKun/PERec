@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from perec.utils.torch_utils import l2_loss
+from perec.utils.torch_utils import l2_loss, get_row_index
 
 
 class Generator(nn.Module):
@@ -50,9 +50,7 @@ class Generator(nn.Module):
         ranking = torch.sum(u_e * i_e, dim=2) + b
         p = F.softmax(ranking, dim=1)
         indices = torch.multinomial(p, num_samples=1)
-
-        batch_size = user.size(0)
-        row_id = torch.arange(batch_size, device=user.device).unsqueeze(dim=1)
+        row_id = get_row_index(u_e)
 
         good_neg = items[row_id, indices].squeeze()
 

@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from perec.utils.torch_utils import l2_loss
+from perec.utils.torch_utils import l2_loss, get_row_index
 
 
 class Generator(nn.Module):
@@ -28,9 +28,15 @@ class Generator(nn.Module):
 
         u_e = u_e.unsqueeze(dim=1)
         logits = torch.sum(u_e * i_e, dim=2)
+        probs = F.softmax(logits, dim=1)
         log_probs = F.log_softmax(logits, dim=1)
-        
-        gan_loss = -torch.sum(log_probs * reward)
+
+        sampled_id = torch.multinomial(probs, num_samples=1)
+        row_idx = get_row_index(u_e)
+
+        sampled_probs = log_probs[row_idx, sampled_id]
+        sampled_reward = reward[row_idx, sampled_id]
+        gan_loss = -torch.mean(sampled_probs * sampled_reward)
 
         reg_loss = self.regs * l2_loss(u_e, i_e)
 
@@ -45,11 +51,7 @@ class Generator(nn.Module):
         probs = torch.softmax(scores, dim=-1)
 
         sampled_id = torch.multinomial(probs, num_samples=1)
-
-        batch_size = u_e.size(0)
-        row_idx = torch.arange(
-            batch_size, device=u_e.device, dtype=torch.long
-        ).unsqueeze(dim=1)
+        row_idx = get_row_index(u_e)
 
         sampled_neg = items[row_idx, sampled_id].squeeze()
 

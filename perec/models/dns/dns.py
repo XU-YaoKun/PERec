@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-from perec.utils.torch_utils import l2_loss, bpr_loss
+from perec.utils.torch_utils import l2_loss, bpr_loss, get_row_index
 
 
 class DNS(nn.Module):
@@ -31,9 +31,7 @@ class DNS(nn.Module):
             ranking = self.rank(u_e, negs_e)
 
         indices = torch.argmax(ranking, dim=1).unsqueeze(dim=1)
-
-        batch_size = negs.size(0)
-        row_id = torch.arange(batch_size, device=negs.device).unsqueeze(dim=1)
+        row_id = get_row_index(u_e)
 
         good_neg = negs[row_id, indices].squeeze()
         neg_e = self.item_embedding[good_neg]
