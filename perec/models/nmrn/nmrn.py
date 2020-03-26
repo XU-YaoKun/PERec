@@ -30,12 +30,12 @@ class Generator(nn.Module):
 
         u_e = u_e.unsqueeze(dim=1)
         distance = euclidean_distance(u_e, i_e)
-        probs = F.softmax(distance, dim=1)
+        probs = F.softmax(-distance, dim=1)
 
         sampled_id = torch.multinomial(probs, num_samples=1)
         row_ids = get_row_index(u_e)
 
-        log_probs = F.log_softmax(distance, dim=-1)
+        log_probs = F.log_softmax(-distance, dim=-1)
         sampled_probs = log_probs[row_ids, sampled_id]
         sampled_reward = reward[row_ids, sampled_id]
 
@@ -52,8 +52,8 @@ class Generator(nn.Module):
         i_e = self.imlp(i_e)
 
         u_e = u_e.unsqueeze(dim=1)
-        distance = euclidean_distance(u_e, i_e) + 1e-10 
-        prob = F.softmax(distance, dim=1)
+        distance = euclidean_distance(u_e, i_e)  
+        prob = F.softmax(-distance, dim=1)
 
         sampled_id = torch.multinomial(prob, num_samples=1)
         row_idx = get_row_index(u_e)
@@ -81,12 +81,10 @@ class Discriminator(nn.Module):
         nn.init.xavier_uniform_(self.item_embedding)
 
     def forward(self, user, pos, neg, **kwargs):
-        negs = kwargs["negs"]
-
         u_e = self.user_embedding[user]
         pos_e = self.item_embedding[pos]
         neg_e = self.item_embedding[neg]
-        negs_e = self.item_embedding[negs]
+        negs_e = self.item_embedding[kwargs["negs"]]
 
         reg_loss = self.regs * l2_loss(u_e, pos_e, neg_e, negs_e)
 
@@ -97,7 +95,7 @@ class Discriminator(nn.Module):
         impostor = (pos_d.unsqueeze(dim=1) - negs_d + self.margin > 0).float()
         rank = torch.mean(impostor, dim=1) * self.n_user
 
-        hinge_loss = torch.mean(
+        hinge_loss = torch.sum(
             torch.log(rank + 1) * torch.clamp(self.margin + pos_d - neg_d, min=0)
         )
 
