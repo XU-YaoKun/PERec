@@ -50,13 +50,15 @@ i. yelp2018
 |DNS|0.0420|0.0651|0.0162|0.2511|
 |IRGAN|0.0349|0.0558|0.0135|0.2200|
 |AdvIR|0.0405|0.0627|0.0156|0.2416|
-|NMRN|||||
+|NMRN|0.0273|0.0433|0.0111|0.1810|
 
 Other experimental results can be found in our paper, or can be obtained using this code repo. Note that we use a different method to calculate `NDCG` here, so it is slightly different from what presented in paper.
 
 Some parameters, like `regs` and `lr`, can be tuned in order to get a better performance.
 
 Please note that, to test these models in our datasets, we did some sorts of simplification. And also, some original codes have not been released, so we implement them according to corresponding papers. To find the original paper and code, please check references. 
+
+Also, when using pretrained model to initialize parameters, better performance can be obtained. But in this repo, all models are trained from scratch.
 
 ### 5. Reference
 [1] Rendle, Steffen, et al. "BPR: Bayesian personalized ranking from implicit feedback." Proceedings of the twenty-fifth conference on uncertainty in artificial intelligence. AUAI Press, 2009.
