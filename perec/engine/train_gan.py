@@ -26,7 +26,7 @@ def train_gan(model, data_loader, optimizer, cur_epoch):
         with torch.no_grad():
             good_neg = netG.throw(user, negs)
 
-        batch_gan_lossD, batch_regsD = netD(user, pos, good_neg)
+        batch_gan_lossD, batch_regsD = netD(user, pos, good_neg, negs=negs)
         batch_lossD = batch_gan_lossD + batch_regsD
 
         optimD.zero_grad()

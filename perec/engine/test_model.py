@@ -40,7 +40,7 @@ def get_score_v2(model, train_user_dict, s, t):
     return score_matrix
 
 
-def test_model_v2(model, ks, user_dict, n_batchs=4):
+def test_model_v2(model, ks, user_dict, n_batchs=32):
     train_user_dict, test_user_dict = (
         user_dict.train_user_dict,
         user_dict.test_user_dict,

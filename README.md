@@ -49,9 +49,22 @@ i. yelp2018
 |RWS|0.0340|0.0528|0.0132|0.2098|
 |DNS|0.0420|0.0651|0.0162|0.2511|
 |IRGAN|0.0349|0.0558|0.0135|0.2200|
-|AdvIR|||||
+|AdvIR|0.0405|0.0627|0.0156|0.2416|
 |NMRN|||||
 
 Other experimental results can be found in our paper, or can be obtained using this code repo. Note that we use a different method to calculate `NDCG` here, so it is slightly different from what presented in paper.
 
 Some parameters, like `regs` and `lr`, can be tuned in order to get a better performance.
+
+Please note that, to test these models in our datasets, we did some sorts of simplification. And also, some original codes have not been released, so we implement them according to corresponding papers. To find the original paper and code, please check references. 
+
+### 5. Reference
+[1] Rendle, Steffen, et al. "BPR: Bayesian personalized ranking from implicit feedback." Proceedings of the twenty-fifth conference on uncertainty in artificial intelligence. AUAI Press, 2009.
+
+[2] Zhang, Weinan et al. “Optimizing top-n collaborative filtering via dynamic negative item sampling.” SIGIR (2013).
+
+[3] Wang, Jun et al. “IRGAN.” Proceedings of the 40th International ACM SIGIR Conference on Research and Development in Information Retrieval - SIGIR  ’17 (2017): n. pag. Crossref. Web.
+
+[4] Park, Dae Hoon, and Yi Chang. "Adversarial sampling and training for semi-supervised information retrieval." The World Wide Web Conference. 2019.
+
+[5] Wang, Qinyong, et al. "Neural memory streaming recommender networks with adversarial training." Proceedings of the 24th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining. 2018.

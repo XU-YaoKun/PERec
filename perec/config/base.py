@@ -25,6 +25,8 @@ _C.MODEL.REGS = 1e-5
 _C.MODEL.REGSD = 1e-5
 _C.MODEL.REGSG = 1e-5
 
+_C.MODEL.MARGIN = 1.0
+
 # -----------------------------------------
 # Dataset
 # -----------------------------------------
@@ -91,6 +93,7 @@ _C.TEST.KS = [20, 40, 60, 80, 100]
 # - RECALL - PRECISION - NDCG - HIT_RATIO
 _C.TEST.METRIC = "RECALL"
 
+_C.TEST.NUM_BATCH = 4
 # -----------------------------------------
 # Dataset
 # -----------------------------------------

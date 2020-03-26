@@ -75,7 +75,7 @@ def train(cfg, output_dir=""):
 
         if cur_epoch % cfg.TRAIN.LOG_PERIOD == 0 or cur_epoch == max_epoch:
             with torch.no_grad():
-                result = test_model_v2(model, cfg.TEST.KS, user_dict)
+                result = test_model_v2(model, cfg.TEST.KS, user_dict, cfg.TEST.NUM_BATCH)
             print("Epoch[{}]-Test".format(cur_epoch))
             print_dict(result)
 
